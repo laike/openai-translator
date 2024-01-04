@@ -17,7 +17,7 @@ import { detectLang, getLangConfig, sourceLanguages, targetLanguages, LangCode }
 import { translate, TranslateMode } from '../translate'
 import { Select, Value, Option } from 'baseui-sd/select'
 import { RxEraser, RxReload, RxStop } from 'react-icons/rx'
-import { LuStars, LuStarOff } from 'react-icons/lu'
+import { LuStar, LuStarOff } from 'react-icons/lu'
 import { clsx } from 'clsx'
 import { Button } from 'baseui-sd/button'
 import { ErrorBoundary } from 'react-error-boundary'
@@ -2153,7 +2153,7 @@ function InnerTranslator(props: IInnerTranslatorProps) {
                                                             }}
                                                         >
                                                             {isAutoCollectOn ? (
-                                                                <LuStars size={15} />
+                                                                <LuStar size={15} />
                                                             ) : (
                                                                 <LuStarOff size={15} />
                                                             )}
