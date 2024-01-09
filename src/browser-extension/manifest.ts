@@ -23,9 +23,12 @@ export function getManifest(browser: 'firefox' | 'chromium') {
 
         action: {
             default_icon: 'icon.png',
-            default_popup: 'src/browser-extension/popup/index.html',
+            // default_popup: 'src/browser-extension/popup/index.html',
+            // default_popup: 'src/browser-extension/popup/index.html',
         },
-
+        side_panel: {
+            default_path: 'src/browser-extension/chatbox/index.html',
+        },
         content_scripts: [
             {
                 matches: ['<all_urls>'],
@@ -39,7 +42,7 @@ export function getManifest(browser: 'firefox' | 'chromium') {
             service_worker: 'src/browser-extension/background/index.ts',
         },
 
-        permissions: ['storage', 'contextMenus'],
+        permissions: ['storage', 'contextMenus', 'sidePanel', 'tabs'],
 
         commands: {
             'open-popup': {

@@ -1,10 +1,6 @@
 import { useCallback, useEffect, useReducer, useState } from 'react'
 import _ from 'underscore'
-import { Tabs, Tab, StyledTabList, StyledTabPanel } from 'baseui-sd/tabs-motion'
 import icon from '../assets/images/icon-large.png'
-import beams from '../assets/images/beams.jpg'
-import wechat from '../assets/images/wechat.png'
-import alipay from '../assets/images/alipay.png'
 import toast, { Toaster } from 'react-hot-toast'
 import * as utils from '../utils'
 import { Client as Styletron } from 'styletron-engine-atomic'
@@ -22,7 +18,7 @@ import { createUseStyles } from 'react-jss'
 import clsx from 'clsx'
 import { ISettings, IThemedStyleProps, LanguageDetectionEngine, ThemeType } from '../types'
 import { useTheme } from '../hooks/useTheme'
-import { IoCloseCircle, IoRefreshSharp, IoSettingsOutline } from 'react-icons/io5'
+import { IoCloseCircle, IoRefreshSharp } from 'react-icons/io5'
 import { useTranslation } from 'react-i18next'
 import AppConfig from '../../../package.json'
 import { useSettings } from '../hooks/useSettings'
@@ -39,9 +35,7 @@ import { GlobalSuspense } from './GlobalSuspense'
 import { Modal, ModalBody, ModalButton, ModalFooter, ModalHeader } from 'baseui-sd/modal'
 import { Provider, getEngine } from '../engines'
 import { IModel } from '../engines/interfaces'
-import { PiTextbox } from 'react-icons/pi'
-import { BsKeyboard } from 'react-icons/bs'
-import { Cell, Grid } from 'baseui-sd/layout-grid'
+import { Navigation } from 'baseui-sd/side-navigation'
 import {
     II18nPromotionContent,
     IPromotionResponse,
@@ -58,7 +52,6 @@ import { usePromotionShowed } from '../hooks/usePromotionShowed'
 import { trackEvent } from '@aptabase/tauri'
 import { Skeleton } from 'baseui-sd/skeleton'
 import { SpeakerIcon } from './SpeakerIcon'
-import { RxSpeakerLoud } from 'react-icons/rx'
 import { Notification } from 'baseui-sd/notification'
 import { usePromotionNeverDisplay } from '../hooks/usePromotionNeverDisplay'
 
@@ -1519,74 +1512,7 @@ export function InnerSettings({
         }
     }, [showFooter])
 
-    const [showBuyMeACoffee, setShowBuyMeACoffee] = useState(false)
-
-    const [activeTab, setActiveTab] = useState(0)
-
-    const [isScrolled, setIsScrolled] = useState(window.scrollY > 0)
-
-    useEffect(() => {
-        const onScroll = () => {
-            setIsScrolled(window.scrollY > 0)
-        }
-        window.addEventListener('scroll', onScroll)
-        return () => {
-            window.removeEventListener('scroll', onScroll)
-        }
-    }, [])
-
-    const tabsOverrides = {
-        Root: {
-            style: {
-                '& button:hover': {
-                    background: 'transparent !important',
-                },
-            },
-        },
-        TabList: {
-            style: () => ({}),
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            component: function TabsListOverride(props: any) {
-                return (
-                    <Grid behavior='fluid'>
-                        <Cell span={12}>
-                            <StyledTabList {...props} />
-                        </Cell>
-                    </Grid>
-                )
-            },
-        },
-    }
-
-    const tabOverrides = {
-        TabPanel: {
-            style: {
-                padding: '0px',
-            },
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            component: function TabsListOverride(props: any) {
-                return (
-                    <Grid>
-                        <Cell span={[1, 2, 3]}>
-                            <StyledTabPanel {...props} />
-                        </Cell>
-                    </Grid>
-                )
-            },
-        },
-        Tab: {
-            style: {
-                'color': theme.colors.black,
-                'background': 'transparent',
-                ':hover': {
-                    background: 'rgba(255, 255, 255, 0.35) !important',
-                },
-                ':active': {
-                    background: 'rgba(255, 255, 255, 0.45) !important',
-                },
-            },
-        },
-    }
+    const [activeTab, setActiveTab] = useState<string>('General')
 
     const getI18nPromotionContent = (contentItem: II18nPromotionContentItem) => {
         let c =
@@ -1708,130 +1634,37 @@ export function InnerSettings({
 
     console.debug('render settings')
 
+    const sideNavigation = [
+        {
+            title: 'General',
+            itemId: 'General',
+        },
+        {
+            title: 'TTS',
+            itemId: 'TTS',
+        },
+        {
+            title: 'Writing',
+            itemId: 'Writing',
+        },
+        {
+            title: 'Shortcuts',
+            itemId: 'Shortcuts',
+        },
+    ]
+
     return (
         <div
             style={{
-                paddingTop: utils.isBrowserExtensionOptions() ? undefined : '136px',
-                paddingBottom: utils.isBrowserExtensionOptions() ? undefined : '32px',
-                background: theme.colors.backgroundPrimary,
-                minWidth: isDesktopApp ? 450 : 400,
+                marginTop: utils.isBrowserExtensionOptions() ? undefined : '136px',
+                marginBottom: utils.isBrowserExtensionOptions() ? undefined : '32px',
+                minWidth: 960,
                 maxHeight: utils.isUserscript() ? 'calc(100vh - 32px)' : undefined,
                 overflow: utils.isUserscript() ? 'auto' : undefined,
             }}
             data-testid='settings-container'
         >
-            <nav
-                style={{
-                    position: utils.isBrowserExtensionOptions() ? 'sticky' : 'fixed',
-                    left: 0,
-                    top: 0,
-                    zIndex: 1001,
-                    width: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    background: `url(${utils.getAssetUrl(beams)}) no-repeat center center`,
-                    boxSizing: 'border-box',
-                    boxShadow: isScrolled ? theme.lighting.shadow600 : undefined,
-                }}
-                data-tauri-drag-region
-            >
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        color: '#333',
-                        gap: 10,
-                        padding: '15px 25px 0 25px',
-                    }}
-                >
-                    <img width='22' src={utils.getAssetUrl(icon)} alt='logo' />
-                    <h2
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            gap: 6,
-                        }}
-                    >
-                        OpenAI Translator
-                        {AppConfig?.version ? (
-                            <a
-                                href='https://github.com/yetone/openai-translator/releases'
-                                target='_blank'
-                                rel='noreferrer'
-                                style={linkStyle}
-                            >
-                                {AppConfig.version}
-                            </a>
-                        ) : null}
-                    </h2>
-                    <div
-                        style={{
-                            flexGrow: 1,
-                        }}
-                    />
-                    <div>
-                        <Button
-                            kind='secondary'
-                            size='mini'
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                setShowBuyMeACoffee(true)
-                                trackEvent('buy_me_a_coffee_clicked')
-                            }}
-                        >
-                            {'❤️  ' + t('Buy me a coffee')}
-                        </Button>
-                    </div>
-                </div>
-                <Tabs
-                    overrides={tabsOverrides}
-                    activeKey={activeTab}
-                    onChange={({ activeKey }) => {
-                        setActiveTab(parseInt(activeKey as string, 10))
-                    }}
-                    fill='fixed'
-                    renderAll
-                >
-                    <Tab
-                        title={t('General')}
-                        artwork={() => {
-                            return <IoSettingsOutline size={14} />
-                        }}
-                        overrides={tabOverrides}
-                    />
-                    <Tab
-                        title={t('TTS')}
-                        artwork={() => {
-                            return <RxSpeakerLoud size={14} />
-                        }}
-                        overrides={tabOverrides}
-                    />
-                    <Tab
-                        title={t('Writing')}
-                        artwork={() => {
-                            return <PiTextbox size={14} />
-                        }}
-                        overrides={tabOverrides}
-                    />
-                    <Tab
-                        title={t('Shortcuts')}
-                        artwork={() => {
-                            return <BsKeyboard size={14} />
-                        }}
-                        overrides={{
-                            ...tabOverrides,
-                            Tab: {
-                                ...tabOverrides.Tab,
-                                props: {
-                                    'data-testid': 'shortcuts',
-                                },
-                            },
-                        }}
-                    />
-                </Tabs>
-            </nav>
+            {activeTab}
             {headerPromotion && !headerPromotionNeverDisplay && (
                 <div
                     className={styles.headerPromotion}
@@ -1873,567 +1706,612 @@ export function InnerSettings({
                     </Notification>
                 </div>
             )}
-            {!isDesktopApp && (
-                <div
-                    style={{
-                        padding: '20px 25px 0px 25px',
-                        color: theme.colors.contentPrimary,
-                    }}
-                >
-                    {t(
-                        'It is recommended to download the desktop application of OpenAI Translator to enjoy the wonderful experience of word translation in all software!'
-                    )}{' '}
-                    <a
-                        target='_blank'
-                        href={
-                            values?.i18n?.toLowerCase().includes('zh')
-                                ? 'https://github.com/openai-translator/openai-translator/blob/main/README-CN.md#%E5%AE%89%E8%A3%85'
-                                : 'https://github.com/openai-translator/openai-translator#installation'
-                        }
-                        rel='noreferrer'
-                        style={{
-                            color: theme.colors.linkText,
-                        }}
+            <div className='flex flex-row gap-5'>
+                <div className='w-[200px] bg-gray-900 rounded-xl'>
+                    <nav
+                        data-tauri-drag-region
+                        className='text-black dark:text-white flex flex-row items-center  gap-2 py-5 px-4'
                     >
-                        {t('Download Link')}
-                    </a>
-                </div>
-            )}
-            <Form
-                form={form}
-                style={{
-                    padding: '20px 25px',
-                    paddingBottom: utils.isBrowserExtensionOptions() ? 0 : undefined,
-                }}
-                onFinish={onSubmit}
-                initialValues={values}
-                onValuesChange={onChange}
-            >
-                <div>
-                    <div
-                        style={{
-                            display: activeTab === 0 ? 'block' : 'none',
-                        }}
-                    >
-                        <FormItem name='i18n' label={t('i18n')}>
-                            <Ii18nSelector onBlur={onBlur} />
-                        </FormItem>
-                        <FormItem
-                            name='provider'
-                            label={
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        gap: 10,
-                                    }}
+                        <img width='22' src={utils.getAssetUrl(icon)} alt='logo' />
+                        <h2
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                gap: 6,
+                            }}
+                        >
+                            OpenAI Translator
+                            {AppConfig?.version ? (
+                                <a
+                                    href='https://github.com/yetone/openai-translator/releases'
+                                    target='_blank'
+                                    rel='noreferrer'
+                                    style={linkStyle}
                                 >
-                                    {t('Default service provider')}
-                                    {openaiAPIKeyPromotion !== undefined && !openaiAPIKeyPromotionShowed && (
+                                    {AppConfig.version}
+                                </a>
+                            ) : null}
+                        </h2>
+                    </nav>
+                    <Navigation
+                        items={sideNavigation}
+                        activeItemId={activeTab}
+                        onChange={({ event, item }) => {
+                            event.preventDefault()
+                            setActiveTab(item.itemId || '')
+                        }}
+                    />
+                </div>
+                <div className='flex-1 bg-gray-900 rounded-xl'>
+                    <Form
+                        form={form}
+                        style={{
+                            padding: '20px 25px',
+                            paddingBottom: utils.isBrowserExtensionOptions() ? 0 : undefined,
+                        }}
+                        onFinish={onSubmit}
+                        initialValues={values}
+                        onValuesChange={onChange}
+                    >
+                        <div>
+                            <div
+                                style={{
+                                    display: activeTab === 'General' ? 'block' : 'none',
+                                }}
+                            >
+                                <FormItem name='i18n' label={t('i18n')}>
+                                    <Ii18nSelector onBlur={onBlur} />
+                                </FormItem>
+                                <FormItem
+                                    name='provider'
+                                    label={
                                         <div
                                             style={{
-                                                width: '0.45rem',
-                                                height: '0.45rem',
-                                                borderRadius: '50%',
-                                                backgroundColor: theme.colors.warning300,
+                                                display: 'flex',
+                                                flexDirection: 'row',
+                                                alignItems: 'center',
+                                                gap: 10,
                                             }}
-                                        />
-                                    )}
-                                </div>
-                            }
-                            required
-                        >
-                            <ProviderSelector
-                                hasPromotion={openaiAPIKeyPromotion !== undefined && !openaiAPIKeyPromotionShowed}
-                            />
-                        </FormItem>
-                        <div
-                            style={{
-                                display: values.provider === 'Gemini' ? 'block' : 'none',
-                            }}
-                        >
-                            <FormItem
-                                name='geminiAPIModel'
-                                label={t('API Model')}
-                                required={values.provider === 'Gemini'}
-                            >
-                                <APIModelSelector provider='Gemini' currentProvider={values.provider} onBlur={onBlur} />
-                            </FormItem>
-                            <FormItem
-                                required={values.provider === 'Gemini'}
-                                name='geminiAPIKey'
-                                label='Gemini API Key'
-                                caption={
-                                    <div>
-                                        {t('Go to the')}{' '}
-                                        <a
-                                            target='_blank'
-                                            href='https://makersuite.google.com/app/apikey'
-                                            rel='noreferrer'
-                                            style={linkStyle}
                                         >
-                                            Google AI Studio
-                                        </a>{' '}
-                                        {t('to get your API Key.')}
-                                    </div>
-                                }
-                            >
-                                <Input autoFocus type='password' size='compact' onBlur={onBlur} />
-                            </FormItem>
-                        </div>
-                        <div
-                            style={{
-                                display: values.provider === 'OpenAI' ? 'block' : 'none',
-                            }}
-                        >
-                            <FormItem
-                                required={values.provider === 'OpenAI'}
-                                name='apiKeys'
-                                label={t('API Key')}
-                                caption={
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            gap: 3,
-                                        }}
-                                    >
-                                        <div>
-                                            {t('Go to the')}{' '}
-                                            <a
-                                                target='_blank'
-                                                href='https://platform.openai.com/account/api-keys'
-                                                rel='noreferrer'
-                                                style={linkStyle}
-                                            >
-                                                {t('OpenAI page')}
-                                            </a>{' '}
-                                            {t(
-                                                'to get your API Key. You can separate multiple API Keys with English commas to achieve quota doubling and load balancing.'
+                                            {t('Default service provider')}
+                                            {openaiAPIKeyPromotion !== undefined && !openaiAPIKeyPromotionShowed && (
+                                                <div
+                                                    style={{
+                                                        width: '0.45rem',
+                                                        height: '0.45rem',
+                                                        borderRadius: '50%',
+                                                        backgroundColor: theme.colors.warning300,
+                                                    }}
+                                                />
                                             )}
                                         </div>
-                                        {openaiAPIKeyPromotion && (
-                                            <div className={styles.promotion}>
-                                                <div
-                                                    onClick={(e) => {
-                                                        if ((e.target as HTMLElement).tagName === 'A') {
-                                                            const href = (e.target as HTMLAnchorElement).href
-                                                            if (href && href.startsWith('http')) {
-                                                                e.preventDefault()
-                                                                e.stopPropagation()
-                                                                setDisclaimerPromotion(openaiAPIKeyPromotion)
-                                                                setDisclaimerAgreeLink(href)
-                                                            }
-                                                        }
-                                                    }}
+                                    }
+                                    required
+                                >
+                                    <ProviderSelector
+                                        hasPromotion={
+                                            openaiAPIKeyPromotion !== undefined && !openaiAPIKeyPromotionShowed
+                                        }
+                                    />
+                                </FormItem>
+                                <div
+                                    style={{
+                                        display: values.provider === 'Gemini' ? 'block' : 'none',
+                                    }}
+                                >
+                                    <FormItem
+                                        name='geminiAPIModel'
+                                        label={t('API Model')}
+                                        required={values.provider === 'Gemini'}
+                                    >
+                                        <APIModelSelector
+                                            provider='Gemini'
+                                            currentProvider={values.provider}
+                                            onBlur={onBlur}
+                                        />
+                                    </FormItem>
+                                    <FormItem
+                                        required={values.provider === 'Gemini'}
+                                        name='geminiAPIKey'
+                                        label='Gemini API Key'
+                                        caption={
+                                            <div>
+                                                {t('Go to the')}{' '}
+                                                <a
+                                                    target='_blank'
+                                                    href='https://makersuite.google.com/app/apikey'
+                                                    rel='noreferrer'
+                                                    style={linkStyle}
                                                 >
-                                                    {renderI18nPromotionContent(openaiAPIKeyPromotion.promotion)}
-                                                </div>
-                                                {openaiAPIKeyPromotion.configuration_doc_link && (
-                                                    <div
-                                                        style={{
-                                                            display: 'flex',
-                                                            flexDirection: 'row',
-                                                            alignItems: 'center',
-                                                            gap: 3,
-                                                        }}
+                                                    Google AI Studio
+                                                </a>{' '}
+                                                {t('to get your API Key.')}
+                                            </div>
+                                        }
+                                    >
+                                        <Input autoFocus type='password' size='compact' onBlur={onBlur} />
+                                    </FormItem>
+                                </div>
+                                <div
+                                    style={{
+                                        display: values.provider === 'OpenAI' ? 'block' : 'none',
+                                    }}
+                                >
+                                    <FormItem
+                                        required={values.provider === 'OpenAI'}
+                                        name='apiKeys'
+                                        label={t('API Key')}
+                                        caption={
+                                            <div
+                                                style={{
+                                                    display: 'flex',
+                                                    flexDirection: 'column',
+                                                    gap: 3,
+                                                }}
+                                            >
+                                                <div>
+                                                    {t('Go to the')}{' '}
+                                                    <a
+                                                        target='_blank'
+                                                        href='https://platform.openai.com/account/api-keys'
+                                                        rel='noreferrer'
+                                                        style={linkStyle}
                                                     >
-                                                        <IoIosHelpCircleOutline size={12} />
-                                                        <a
-                                                            href={openaiAPIKeyPromotion.configuration_doc_link}
-                                                            target='_blank'
-                                                            rel='noreferrer'
+                                                        {t('OpenAI page')}
+                                                    </a>{' '}
+                                                    {t(
+                                                        'to get your API Key. You can separate multiple API Keys with English commas to achieve quota doubling and load balancing.'
+                                                    )}
+                                                </div>
+                                                {openaiAPIKeyPromotion && (
+                                                    <div className={styles.promotion}>
+                                                        <div
+                                                            onClick={(e) => {
+                                                                if ((e.target as HTMLElement).tagName === 'A') {
+                                                                    const href = (e.target as HTMLAnchorElement).href
+                                                                    if (href && href.startsWith('http')) {
+                                                                        e.preventDefault()
+                                                                        e.stopPropagation()
+                                                                        setDisclaimerPromotion(openaiAPIKeyPromotion)
+                                                                        setDisclaimerAgreeLink(href)
+                                                                    }
+                                                                }
+                                                            }}
                                                         >
-                                                            {t('How to Use')}
-                                                        </a>
+                                                            {renderI18nPromotionContent(
+                                                                openaiAPIKeyPromotion.promotion
+                                                            )}
+                                                        </div>
+                                                        {openaiAPIKeyPromotion.configuration_doc_link && (
+                                                            <div
+                                                                style={{
+                                                                    display: 'flex',
+                                                                    flexDirection: 'row',
+                                                                    alignItems: 'center',
+                                                                    gap: 3,
+                                                                }}
+                                                            >
+                                                                <IoIosHelpCircleOutline size={12} />
+                                                                <a
+                                                                    href={openaiAPIKeyPromotion.configuration_doc_link}
+                                                                    target='_blank'
+                                                                    rel='noreferrer'
+                                                                >
+                                                                    {t('How to Use')}
+                                                                </a>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 )}
                                             </div>
-                                        )}
-                                    </div>
-                                }
-                            >
-                                <Input
-                                    autoFocus={!openaiAPIKeyPromotion}
-                                    type='password'
-                                    size='compact'
-                                    name='apiKey'
-                                    onBlur={onBlur}
-                                />
-                            </FormItem>
-                            <FormItem name='apiModel' label={t('API Model')} required={values.provider === 'OpenAI'}>
-                                <APIModelSelector provider='OpenAI' currentProvider={values.provider} onBlur={onBlur} />
-                            </FormItem>
-                            <FormItem name='apiURL' label={t('API URL')} required={values.provider === 'OpenAI'}>
-                                <Input size='compact' onBlur={onBlur} />
-                            </FormItem>
-                            <FormItem
-                                name='apiURLPath'
-                                label={t('API URL Path')}
-                                required={values.provider === 'OpenAI'}
-                            >
-                                <Input size='compact' />
-                            </FormItem>
-                        </div>
-                        <div
-                            style={{
-                                display: values.provider === 'Azure' ? 'block' : 'none',
-                            }}
-                        >
-                            <FormItem
-                                required={values.provider === 'Azure'}
-                                name='azureAPIKeys'
-                                label={t('API Key')}
-                                caption={
-                                    <div>
-                                        {t('Go to the')}{' '}
-                                        <a
-                                            target='_blank'
-                                            href='https://learn.microsoft.com/en-us/azure/cognitive-services/openai/chatgpt-quickstart?tabs=command-line&pivots=rest-api#retrieve-key-and-endpoint'
-                                            rel='noreferrer'
-                                            style={linkStyle}
-                                        >
-                                            {t('Azure OpenAI Service page')}
-                                        </a>{' '}
-                                        {t(
-                                            'to get your API Key. You can separate multiple API Keys with English commas to achieve quota doubling and load balancing.'
-                                        )}
-                                    </div>
-                                }
-                            >
-                                <Input autoFocus type='password' size='compact' onBlur={onBlur} />
-                            </FormItem>
-                            <FormItem
-                                name='azureAPIModel'
-                                label={t('API Model')}
-                                required={values.provider === 'Azure'}
-                            >
-                                <APIModelSelector provider='Azure' currentProvider={values.provider} onBlur={onBlur} />
-                            </FormItem>
-                            <FormItem name='azureAPIURL' label={t('API URL')} required={values.provider === 'Azure'}>
-                                <Input size='compact' onBlur={onBlur} />
-                            </FormItem>
-                            <FormItem
-                                name='azureAPIURLPath'
-                                label={t('API URL Path')}
-                                required={values.provider === 'Azure'}
-                            >
-                                <Input size='compact' />
-                            </FormItem>
-                        </div>
-                        <div
-                            style={{
-                                display: values.provider === 'ChatGPT' ? 'block' : 'none',
-                            }}
-                        >
-                            <FormItem
-                                name='chatgptModel'
-                                label={t('API Model')}
-                                required={values.provider === 'ChatGPT'}
-                            >
-                                <APIModelSelector
-                                    provider='ChatGPT'
-                                    currentProvider={values.provider}
-                                    onBlur={onBlur}
-                                />
-                            </FormItem>
-                        </div>
-                        <div
-                            style={{
-                                display: values.provider === 'MiniMax' ? 'block' : 'none',
-                            }}
-                        >
-                            <FormItem
-                                required={values.provider === 'MiniMax'}
-                                name='miniMaxGroupID'
-                                label='MiniMax Group ID'
-                                caption={
-                                    <div>
-                                        {t('Go to the')}{' '}
-                                        <a
-                                            target='_blank'
-                                            href='https://api.minimax.chat/user-center/basic-information'
-                                            rel='noreferrer'
-                                            style={linkStyle}
-                                        >
-                                            {t('MiniMax page')}
-                                        </a>{' '}
-                                        {t('to get your Group ID.')}
-                                    </div>
-                                }
-                            >
-                                <Input size='compact' onBlur={onBlur} />
-                            </FormItem>
-                            <FormItem
-                                required={values.provider === 'MiniMax'}
-                                name='miniMaxAPIKey'
-                                label='MiniMax API Key'
-                                caption={
-                                    <div>
-                                        {t('Go to the')}{' '}
-                                        <a
-                                            target='_blank'
-                                            href='https://api.minimax.chat/user-center/basic-information/interface-key'
-                                            rel='noreferrer'
-                                            style={linkStyle}
-                                        >
-                                            {t('MiniMax page')}
-                                        </a>{' '}
-                                        {t('to get your API Key.')}
-                                    </div>
-                                }
-                            >
-                                <Input autoFocus type='password' size='compact' onBlur={onBlur} />
-                            </FormItem>
-                        </div>
-                        <div
-                            style={{
-                                display: values.provider === 'Moonshot' ? 'block' : 'none',
-                            }}
-                        >
-                            <FormItem
-                                required={values.provider === 'Moonshot'}
-                                name='moonshotAPIKey'
-                                label='Moonshot API Key'
-                                caption={
-                                    <div>
-                                        {t('Go to the')}{' '}
-                                        <a
-                                            target='_blank'
-                                            href='https://www.moonshot.cn/'
-                                            rel='noreferrer'
-                                            style={linkStyle}
-                                        >
-                                            Moonshot Page
-                                        </a>{' '}
-                                        {t('to get your API Key.')}
-                                    </div>
-                                }
-                            >
-                                <Input autoFocus type='password' size='compact' onBlur={onBlur} />
-                            </FormItem>
-                            <FormItem
-                                name='moonshotAPIModel'
-                                label={t('API Model')}
-                                required={values.provider === 'Moonshot'}
-                            >
-                                <APIModelSelector
-                                    provider='Moonshot'
-                                    currentProvider={values.provider}
-                                    onBlur={onBlur}
-                                    apiKey={values.moonshotAPIKey}
-                                />
-                            </FormItem>
-                        </div>
-                        <FormItem name='defaultTranslateMode' label={t('Default Action')}>
-                            <TranslateModeSelector onBlur={onBlur} />
-                        </FormItem>
-                        <FormItem name='defaultTargetLanguage' label={t('Default target language')}>
-                            <LanguageSelector onBlur={onBlur} />
-                        </FormItem>
-                        <FormItem name='languageDetectionEngine' label={t('Language detection engine')}>
-                            <LanguageDetectionEngineSelector onBlur={onBlur} />
-                        </FormItem>
-                        <FormItem name='themeType' label={t('Theme')}>
-                            <ThemeTypeSelector onBlur={onBlur} />
-                        </FormItem>
-                        <FormItem
-                            name='alwaysShowIcons'
-                            label={t('Show icon when text is selected')}
-                            caption={
-                                isDesktopApp && (
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: 6,
-                                        }}
+                                        }
                                     >
-                                        {t(
-                                            'It is highly recommended to disable this feature and use the Clip Extension'
-                                        )}
-                                        <a
-                                            href='https://github.com/openai-translator/openai-translator/blob/main/CLIP-EXTENSIONS.md'
-                                            target='_blank'
-                                            rel='noreferrer'
-                                            style={linkStyle}
-                                        >
-                                            {t('Clip Extension')}
-                                        </a>
-                                    </div>
-                                )
-                            }
-                        >
-                            <AlwaysShowIconsCheckbox onBlur={onBlur} />
-                        </FormItem>
-                        <FormItem
+                                        <Input
+                                            autoFocus={!openaiAPIKeyPromotion}
+                                            type='password'
+                                            size='compact'
+                                            name='apiKey'
+                                            onBlur={onBlur}
+                                        />
+                                    </FormItem>
+                                    <FormItem
+                                        name='apiModel'
+                                        label={t('API Model')}
+                                        required={values.provider === 'OpenAI'}
+                                    >
+                                        <APIModelSelector
+                                            provider='OpenAI'
+                                            currentProvider={values.provider}
+                                            onBlur={onBlur}
+                                        />
+                                    </FormItem>
+                                    <FormItem
+                                        name='apiURL'
+                                        label={t('API URL')}
+                                        required={values.provider === 'OpenAI'}
+                                    >
+                                        <Input size='compact' onBlur={onBlur} />
+                                    </FormItem>
+                                    <FormItem
+                                        name='apiURLPath'
+                                        label={t('API URL Path')}
+                                        required={values.provider === 'OpenAI'}
+                                    >
+                                        <Input size='compact' />
+                                    </FormItem>
+                                </div>
+                                <div
+                                    style={{
+                                        display: values.provider === 'Azure' ? 'block' : 'none',
+                                    }}
+                                >
+                                    <FormItem
+                                        required={values.provider === 'Azure'}
+                                        name='azureAPIKeys'
+                                        label={t('API Key')}
+                                        caption={
+                                            <div>
+                                                {t('Go to the')}{' '}
+                                                <a
+                                                    target='_blank'
+                                                    href='https://learn.microsoft.com/en-us/azure/cognitive-services/openai/chatgpt-quickstart?tabs=command-line&pivots=rest-api#retrieve-key-and-endpoint'
+                                                    rel='noreferrer'
+                                                    style={linkStyle}
+                                                >
+                                                    {t('Azure OpenAI Service page')}
+                                                </a>{' '}
+                                                {t(
+                                                    'to get your API Key. You can separate multiple API Keys with English commas to achieve quota doubling and load balancing.'
+                                                )}
+                                            </div>
+                                        }
+                                    >
+                                        <Input autoFocus type='password' size='compact' onBlur={onBlur} />
+                                    </FormItem>
+                                    <FormItem
+                                        name='azureAPIModel'
+                                        label={t('API Model')}
+                                        required={values.provider === 'Azure'}
+                                    >
+                                        <APIModelSelector
+                                            provider='Azure'
+                                            currentProvider={values.provider}
+                                            onBlur={onBlur}
+                                        />
+                                    </FormItem>
+                                    <FormItem
+                                        name='azureAPIURL'
+                                        label={t('API URL')}
+                                        required={values.provider === 'Azure'}
+                                    >
+                                        <Input size='compact' onBlur={onBlur} />
+                                    </FormItem>
+                                    <FormItem
+                                        name='azureAPIURLPath'
+                                        label={t('API URL Path')}
+                                        required={values.provider === 'Azure'}
+                                    >
+                                        <Input size='compact' />
+                                    </FormItem>
+                                </div>
+                                <div
+                                    style={{
+                                        display: values.provider === 'ChatGPT' ? 'block' : 'none',
+                                    }}
+                                >
+                                    <FormItem
+                                        name='chatgptModel'
+                                        label={t('API Model')}
+                                        required={values.provider === 'ChatGPT'}
+                                    >
+                                        <APIModelSelector
+                                            provider='ChatGPT'
+                                            currentProvider={values.provider}
+                                            onBlur={onBlur}
+                                        />
+                                    </FormItem>
+                                </div>
+                                <div
+                                    style={{
+                                        display: values.provider === 'MiniMax' ? 'block' : 'none',
+                                    }}
+                                >
+                                    <FormItem
+                                        required={values.provider === 'MiniMax'}
+                                        name='miniMaxGroupID'
+                                        label='MiniMax Group ID'
+                                        caption={
+                                            <div>
+                                                {t('Go to the')}{' '}
+                                                <a
+                                                    target='_blank'
+                                                    href='https://api.minimax.chat/user-center/basic-information'
+                                                    rel='noreferrer'
+                                                    style={linkStyle}
+                                                >
+                                                    {t('MiniMax page')}
+                                                </a>{' '}
+                                                {t('to get your Group ID.')}
+                                            </div>
+                                        }
+                                    >
+                                        <Input size='compact' onBlur={onBlur} />
+                                    </FormItem>
+                                    <FormItem
+                                        required={values.provider === 'MiniMax'}
+                                        name='miniMaxAPIKey'
+                                        label='MiniMax API Key'
+                                        caption={
+                                            <div>
+                                                {t('Go to the')}{' '}
+                                                <a
+                                                    target='_blank'
+                                                    href='https://api.minimax.chat/user-center/basic-information/interface-key'
+                                                    rel='noreferrer'
+                                                    style={linkStyle}
+                                                >
+                                                    {t('MiniMax page')}
+                                                </a>{' '}
+                                                {t('to get your API Key.')}
+                                            </div>
+                                        }
+                                    >
+                                        <Input autoFocus type='password' size='compact' onBlur={onBlur} />
+                                    </FormItem>
+                                </div>
+                                <div
+                                    style={{
+                                        display: values.provider === 'Moonshot' ? 'block' : 'none',
+                                    }}
+                                >
+                                    <FormItem
+                                        required={values.provider === 'Moonshot'}
+                                        name='moonshotAPIKey'
+                                        label='Moonshot API Key'
+                                        caption={
+                                            <div>
+                                                {t('Go to the')}{' '}
+                                                <a
+                                                    target='_blank'
+                                                    href='https://www.moonshot.cn/'
+                                                    rel='noreferrer'
+                                                    style={linkStyle}
+                                                >
+                                                    Moonshot Page
+                                                </a>{' '}
+                                                {t('to get your API Key.')}
+                                            </div>
+                                        }
+                                    >
+                                        <Input autoFocus type='password' size='compact' onBlur={onBlur} />
+                                    </FormItem>
+                                    <FormItem
+                                        name='moonshotAPIModel'
+                                        label={t('API Model')}
+                                        required={values.provider === 'Moonshot'}
+                                    >
+                                        <APIModelSelector
+                                            provider='Moonshot'
+                                            currentProvider={values.provider}
+                                            onBlur={onBlur}
+                                            apiKey={values.moonshotAPIKey}
+                                        />
+                                    </FormItem>
+                                </div>
+                                <FormItem name='defaultTranslateMode' label={t('Default Action')}>
+                                    <TranslateModeSelector onBlur={onBlur} />
+                                </FormItem>
+                                <FormItem name='defaultTargetLanguage' label={t('Default target language')}>
+                                    <LanguageSelector onBlur={onBlur} />
+                                </FormItem>
+                                <FormItem name='languageDetectionEngine' label={t('Language detection engine')}>
+                                    <LanguageDetectionEngineSelector onBlur={onBlur} />
+                                </FormItem>
+                                <FormItem name='themeType' label={t('Theme')}>
+                                    <ThemeTypeSelector onBlur={onBlur} />
+                                </FormItem>
+                                <FormItem
+                                    name='alwaysShowIcons'
+                                    label={t('Show icon when text is selected')}
+                                    caption={
+                                        isDesktopApp && (
+                                            <div
+                                                style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: 6,
+                                                }}
+                                            >
+                                                {t(
+                                                    'It is highly recommended to disable this feature and use the Clip Extension'
+                                                )}
+                                                <a
+                                                    href='https://github.com/openai-translator/openai-translator/blob/main/CLIP-EXTENSIONS.md'
+                                                    target='_blank'
+                                                    rel='noreferrer'
+                                                    style={linkStyle}
+                                                >
+                                                    {t('Clip Extension')}
+                                                </a>
+                                            </div>
+                                        )
+                                    }
+                                >
+                                    <AlwaysShowIconsCheckbox onBlur={onBlur} />
+                                </FormItem>
+                                <FormItem
+                                    style={{
+                                        display: isDesktopApp && isMacOS ? 'block' : 'none',
+                                    }}
+                                    name='allowUsingClipboardWhenSelectedTextNotAvailable'
+                                    label={t('Using clipboard')}
+                                    caption={t(
+                                        'Allow using the clipboard to get the selected text when the selected text is not available'
+                                    )}
+                                >
+                                    <MyCheckbox onBlur={onBlur} />
+                                </FormItem>
+                                <FormItem name='autoTranslate' label={t('Auto Translate')}>
+                                    <AutoTranslateCheckbox onBlur={onBlur} />
+                                </FormItem>
+                                <FormItem
+                                    style={{
+                                        display: isDesktopApp ? 'block' : 'none',
+                                    }}
+                                    name='restorePreviousPosition'
+                                    label={t('Fixed Position')}
+                                >
+                                    <RestorePreviousPositionCheckbox onBlur={onBlur} />
+                                </FormItem>
+                                <FormItem name='selectInputElementsText' label={t('Word selection in input')}>
+                                    <SelectInputElementsCheckbox onBlur={onBlur} />
+                                </FormItem>
+                                {isTauri && (
+                                    <FormItem name='runAtStartup' label={t('Run at startup')}>
+                                        <RunAtStartupCheckbox onBlur={onBlur} />
+                                    </FormItem>
+                                )}
+                                <FormItem
+                                    style={{
+                                        display: isDesktopApp && isMacOS ? 'block' : 'none',
+                                    }}
+                                    name='hideTheIconInTheDock'
+                                    label={t('Hide the icon in the Dock bar')}
+                                >
+                                    <MyCheckbox onBlur={onBlur} />
+                                </FormItem>
+                                <FormItem
+                                    style={{
+                                        display: isDesktopApp ? 'block' : 'none',
+                                    }}
+                                    name='autoHideWindowWhenOutOfFocus'
+                                    label={t('Auto hide window when out of focus')}
+                                >
+                                    <MyCheckbox onBlur={onBlur} />
+                                </FormItem>
+                                <FormItem
+                                    style={{
+                                        display: isDesktopApp ? 'block' : 'none',
+                                    }}
+                                    name='automaticCheckForUpdates'
+                                    label={t('Automatic check for updates')}
+                                >
+                                    <MyCheckbox onBlur={onBlur} />
+                                </FormItem>
+                                <FormItem
+                                    style={{
+                                        display: isDesktopApp ? 'block' : 'none',
+                                    }}
+                                    name='disableCollectingStatistics'
+                                    label={t('disable collecting statistics')}
+                                >
+                                    <MyCheckbox onBlur={onBlur} />
+                                </FormItem>
+                            </div>
+                            <div
+                                style={{
+                                    display: activeTab === 'TTS' ? 'block' : 'none',
+                                }}
+                            >
+                                <FormItem
+                                    name='readSelectedWordsFromInputElementsText'
+                                    label={t('Read the selected words in input')}
+                                >
+                                    <ReadSelectedWordsFromInputElementsCheckbox onBlur={onBlur} />
+                                </FormItem>
+                                <FormItem name='tts' label={t('TTS')}>
+                                    <TTSVoicesSettings onBlur={onBlur} />
+                                </FormItem>
+                            </div>
+                            <div
+                                style={{
+                                    display: activeTab === 'Writing' ? 'block' : 'none',
+                                }}
+                            >
+                                <FormItem
+                                    style={{
+                                        display: isDesktopApp ? 'block' : 'none',
+                                    }}
+                                    name='writingTargetLanguage'
+                                    label={t('Writing target language')}
+                                >
+                                    <LanguageSelector onBlur={onBlur} />
+                                </FormItem>
+                                <FormItem
+                                    style={{
+                                        display: isDesktopApp ? 'block' : 'none',
+                                    }}
+                                    name='writingHotkey'
+                                    label={t('Writing Hotkey')}
+                                    caption={t(
+                                        'Press this shortcut key in the input box of any application, and the text already entered in the input box will be automatically translated into the writing target language.'
+                                    )}
+                                >
+                                    <HotkeyRecorder onBlur={onBlur} testId='writing-hotkey-recorder' />
+                                </FormItem>
+                                <FormItem
+                                    style={{
+                                        display: isDesktopApp ? 'block' : 'none',
+                                    }}
+                                    name='writingNewlineHotkey'
+                                    label={t('Writing line break shortcut')}
+                                    caption={t(
+                                        'When writing, which key should be pressed when encountering a line break?'
+                                    )}
+                                >
+                                    <HotkeyRecorder onBlur={onBlur} testId='writing-newline-hotkey-recorder' />
+                                </FormItem>
+                            </div>
+                            <div
+                                style={{
+                                    display: activeTab === 'Shortcuts' ? 'block' : 'none',
+                                }}
+                            >
+                                <FormItem name='hotkey' label={t('Hotkey')}>
+                                    <HotkeyRecorder onBlur={onBlur} testId='hotkey-recorder' />
+                                </FormItem>
+                                <FormItem name='displayWindowHotkey' label={t('Display window Hotkey')}>
+                                    <HotkeyRecorder onBlur={onBlur} testId='display-window-hotkey-recorder' />
+                                </FormItem>
+                                <FormItem
+                                    style={{
+                                        display: isDesktopApp ? 'block' : 'none',
+                                    }}
+                                    name='ocrHotkey'
+                                    label={t('OCR Hotkey')}
+                                >
+                                    <HotkeyRecorder onBlur={onBlur} testId='ocr-hotkey-recorder' />
+                                </FormItem>
+                            </div>
+                        </div>
+                        <div
                             style={{
-                                display: isDesktopApp && isMacOS ? 'block' : 'none',
+                                position: utils.isBrowserExtensionOptions() ? 'sticky' : 'fixed',
+                                bottom: '7px',
+                                right: '25px',
+                                paddingBottom: utils.isBrowserExtensionOptions() ? '10px' : undefined,
+                                display: 'flex',
+                                alignItems: 'center',
+                                flexDirection: 'row',
+                                zIndex: 1000,
+                                gap: 10,
                             }}
-                            name='allowUsingClipboardWhenSelectedTextNotAvailable'
-                            label={t('Using clipboard')}
-                            caption={t(
-                                'Allow using the clipboard to get the selected text when the selected text is not available'
-                            )}
                         >
-                            <MyCheckbox onBlur={onBlur} />
-                        </FormItem>
-                        <FormItem name='autoTranslate' label={t('Auto Translate')}>
-                            <AutoTranslateCheckbox onBlur={onBlur} />
-                        </FormItem>
-                        <FormItem
-                            style={{
-                                display: isDesktopApp ? 'block' : 'none',
-                            }}
-                            name='restorePreviousPosition'
-                            label={t('Fixed Position')}
-                        >
-                            <RestorePreviousPositionCheckbox onBlur={onBlur} />
-                        </FormItem>
-                        <FormItem name='selectInputElementsText' label={t('Word selection in input')}>
-                            <SelectInputElementsCheckbox onBlur={onBlur} />
-                        </FormItem>
-                        {isTauri && (
-                            <FormItem name='runAtStartup' label={t('Run at startup')}>
-                                <RunAtStartupCheckbox onBlur={onBlur} />
-                            </FormItem>
-                        )}
-                        <FormItem
-                            style={{
-                                display: isDesktopApp && isMacOS ? 'block' : 'none',
-                            }}
-                            name='hideTheIconInTheDock'
-                            label={t('Hide the icon in the Dock bar')}
-                        >
-                            <MyCheckbox onBlur={onBlur} />
-                        </FormItem>
-                        <FormItem
-                            style={{
-                                display: isDesktopApp ? 'block' : 'none',
-                            }}
-                            name='autoHideWindowWhenOutOfFocus'
-                            label={t('Auto hide window when out of focus')}
-                        >
-                            <MyCheckbox onBlur={onBlur} />
-                        </FormItem>
-                        <FormItem
-                            style={{
-                                display: isDesktopApp ? 'block' : 'none',
-                            }}
-                            name='automaticCheckForUpdates'
-                            label={t('Automatic check for updates')}
-                        >
-                            <MyCheckbox onBlur={onBlur} />
-                        </FormItem>
-                        <FormItem
-                            style={{
-                                display: isDesktopApp ? 'block' : 'none',
-                            }}
-                            name='disableCollectingStatistics'
-                            label={t('disable collecting statistics')}
-                        >
-                            <MyCheckbox onBlur={onBlur} />
-                        </FormItem>
-                    </div>
-                    <div
-                        style={{
-                            display: activeTab === 1 ? 'block' : 'none',
-                        }}
-                    >
-                        <FormItem
-                            name='readSelectedWordsFromInputElementsText'
-                            label={t('Read the selected words in input')}
-                        >
-                            <ReadSelectedWordsFromInputElementsCheckbox onBlur={onBlur} />
-                        </FormItem>
-                        <FormItem name='tts' label={t('TTS')}>
-                            <TTSVoicesSettings onBlur={onBlur} />
-                        </FormItem>
-                    </div>
-                    <div
-                        style={{
-                            display: activeTab === 2 ? 'block' : 'none',
-                        }}
-                    >
-                        <FormItem
-                            style={{
-                                display: isDesktopApp ? 'block' : 'none',
-                            }}
-                            name='writingTargetLanguage'
-                            label={t('Writing target language')}
-                        >
-                            <LanguageSelector onBlur={onBlur} />
-                        </FormItem>
-                        <FormItem
-                            style={{
-                                display: isDesktopApp ? 'block' : 'none',
-                            }}
-                            name='writingHotkey'
-                            label={t('Writing Hotkey')}
-                            caption={t(
-                                'Press this shortcut key in the input box of any application, and the text already entered in the input box will be automatically translated into the writing target language.'
-                            )}
-                        >
-                            <HotkeyRecorder onBlur={onBlur} testId='writing-hotkey-recorder' />
-                        </FormItem>
-                        <FormItem
-                            style={{
-                                display: isDesktopApp ? 'block' : 'none',
-                            }}
-                            name='writingNewlineHotkey'
-                            label={t('Writing line break shortcut')}
-                            caption={t('When writing, which key should be pressed when encountering a line break?')}
-                        >
-                            <HotkeyRecorder onBlur={onBlur} testId='writing-newline-hotkey-recorder' />
-                        </FormItem>
-                    </div>
-                    <div
-                        style={{
-                            display: activeTab === 3 ? 'block' : 'none',
-                        }}
-                    >
-                        <FormItem name='hotkey' label={t('Hotkey')}>
-                            <HotkeyRecorder onBlur={onBlur} testId='hotkey-recorder' />
-                        </FormItem>
-                        <FormItem name='displayWindowHotkey' label={t('Display window Hotkey')}>
-                            <HotkeyRecorder onBlur={onBlur} testId='display-window-hotkey-recorder' />
-                        </FormItem>
-                        <FormItem
-                            style={{
-                                display: isDesktopApp ? 'block' : 'none',
-                            }}
-                            name='ocrHotkey'
-                            label={t('OCR Hotkey')}
-                        >
-                            <HotkeyRecorder onBlur={onBlur} testId='ocr-hotkey-recorder' />
-                        </FormItem>
-                    </div>
+                            <div
+                                style={{
+                                    marginRight: 'auto',
+                                }}
+                            />
+                            <Button isLoading={loading} size='mini' startEnhancer={<IoIosSave size={12} />}>
+                                {t('Save')}
+                            </Button>
+                        </div>
+                        <Toaster />
+                    </Form>
                 </div>
-                <div
-                    style={{
-                        position: utils.isBrowserExtensionOptions() ? 'sticky' : 'fixed',
-                        bottom: '7px',
-                        right: '25px',
-                        paddingBottom: utils.isBrowserExtensionOptions() ? '10px' : undefined,
-                        display: 'flex',
-                        alignItems: 'center',
-                        flexDirection: 'row',
-                        zIndex: 1000,
-                        gap: 10,
-                    }}
-                >
-                    <div
-                        style={{
-                            marginRight: 'auto',
-                        }}
-                    />
-                    <Button isLoading={loading} size='mini' startEnhancer={<IoIosSave size={12} />}>
-                        {t('Save')}
-                    </Button>
-                </div>
-                <Toaster />
-            </Form>
+            </div>
+
             {showFooter && (
                 <div
                     className={styles.footer}
@@ -2442,42 +2320,6 @@ export function InnerSettings({
                     }}
                 />
             )}
-            <Modal
-                isOpen={showBuyMeACoffee}
-                onClose={() => setShowBuyMeACoffee(false)}
-                closeable
-                size='auto'
-                autoFocus
-                animate
-            >
-                <ModalHeader
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-                    {'❤️  ' + t('Buy me a coffee')}
-                </ModalHeader>
-                <ModalBody>
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            gap: 10,
-                        }}
-                    >
-                        <div>{t('If you find this tool helpful, you can buy me a cup of coffee.')}</div>
-                        <div>
-                            <img width='330' src={wechat} />
-                        </div>
-                        <div>
-                            <img width='330' src={alipay} />
-                        </div>
-                    </div>
-                </ModalBody>
-            </Modal>
             <Modal
                 isOpen={!!disclaimerPromotion}
                 onClose={() => setDisclaimerPromotion(undefined)}

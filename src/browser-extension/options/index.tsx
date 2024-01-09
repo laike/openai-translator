@@ -18,7 +18,7 @@ const useStyles = createUseStyles({
         display: 'flex',
         justifyContent: 'center',
         backgroundColor: props.theme.colors.backgroundSecondary,
-        height: '100%',
+        height: '100vh',
     }),
     container: {
         maxWidth: '768px',

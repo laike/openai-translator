@@ -6,6 +6,9 @@ import { vocabularyInternalService } from '../../common/internal-services/vocabu
 import { actionInternalService } from '../../common/internal-services/action'
 import { optionsPageHeaderPromotionIDKey, optionsPageOpenaiAPIKeyPromotionIDKey } from '../common'
 
+// Allows users to open the side panel by clicking on the action toolbar icon
+chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch((error) => console.error(error))
+
 browser.contextMenus?.create(
     {
         id: 'open-translator',

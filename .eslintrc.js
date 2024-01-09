@@ -27,6 +27,9 @@ module.exports = {
         'react-hooks/rules-of-hooks': 'error',
         'react-hooks/exhaustive-deps': 'warn',
         'spaced-comment': ['error', 'always', { markers: ['/'] }],
+        'react/display-name': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+        'react/prop-types': 'off',
     },
     settings: {
         'import/resolver': {
