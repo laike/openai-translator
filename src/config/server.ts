@@ -33,36 +33,36 @@ export const getServerConfig = () => {
 
     // region format: iad1,sfo1
     let regions: string[] = []
-    if (process.env.OPENAI_FUNCTION_REGIONS) {
-        regions = process.env.OPENAI_FUNCTION_REGIONS.split(',')
+    if (import.meta.env.OPENAI_FUNCTION_REGIONS) {
+        regions = import.meta.env.OPENAI_FUNCTION_REGIONS.split(',')
     }
 
-    const ACCESS_CODES = process.env.ACCESS_CODE?.split(',').filter(Boolean) || []
+    const ACCESS_CODES = import.meta.env.ACCESS_CODE?.split(',').filter(Boolean) || []
 
     return {
         ACCESS_CODES,
-        CUSTOM_MODELS: process.env.CUSTOM_MODELS,
+        CUSTOM_MODELS: import.meta.env.CUSTOM_MODELS,
 
         SHOW_ACCESS_CODE_CONFIG: !!ACCESS_CODES.length,
 
-        OPENAI_API_KEY: process.env.OPENAI_API_KEY,
-        OPENAI_PROXY_URL: process.env.OPENAI_PROXY_URL,
+        OPENAI_API_KEY: import.meta.env.OPENAI_API_KEY,
+        OPENAI_PROXY_URL: import.meta.env.OPENAI_PROXY_URL,
         OPENAI_FUNCTION_REGIONS: regions,
 
-        AZURE_API_KEY: process.env.AZURE_API_KEY,
-        AZURE_API_VERSION: process.env.AZURE_API_VERSION,
-        USE_AZURE_OPENAI: process.env.USE_AZURE_OPENAI === '1',
+        AZURE_API_KEY: import.meta.env.AZURE_API_KEY,
+        AZURE_API_VERSION: import.meta.env.AZURE_API_VERSION,
+        USE_AZURE_OPENAI: import.meta.env.USE_AZURE_OPENAI === '1',
 
-        IMGUR_CLIENT_ID: process.env.IMGUR_CLIENT_ID || DEFAULT_IMAGUR_CLIENT_ID,
+        IMGUR_CLIENT_ID: import.meta.env.IMGUR_CLIENT_ID || DEFAULT_IMAGUR_CLIENT_ID,
 
-        AGENTS_INDEX_URL: process.env.AGENTS_INDEX_URL
-            ? process.env.AGENTS_INDEX_URL
+        AGENTS_INDEX_URL: import.meta.env.AGENTS_INDEX_URL
+            ? import.meta.env.AGENTS_INDEX_URL
             : 'https://chat-agents.lobehub.com',
 
-        PLUGINS_INDEX_URL: process.env.PLUGINS_INDEX_URL
-            ? process.env.PLUGINS_INDEX_URL
+        PLUGINS_INDEX_URL: import.meta.env.PLUGINS_INDEX_URL
+            ? import.meta.env.PLUGINS_INDEX_URL
             : 'https://chat-plugins.lobehub.com',
 
-        PLUGIN_SETTINGS: process.env.PLUGIN_SETTINGS,
+        PLUGIN_SETTINGS: import.meta.env.PLUGIN_SETTINGS,
     }
 }

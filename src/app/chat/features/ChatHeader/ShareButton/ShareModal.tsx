@@ -4,7 +4,7 @@ import { memo, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Flexbox } from 'react-layout-kit'
 
-import { useScreenshot } from '@/app/features/ChatHeader/ShareButton/useScreenshot'
+import { useScreenshot } from '@/app/chat/features/ChatHeader/ShareButton/useScreenshot'
 import { FORM_STYLE } from '@/const/layoutTokens'
 import { useChatStore } from '@/store/chat'
 import { useGlobalStore } from '@/store/global'

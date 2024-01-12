@@ -1,11 +1,11 @@
-import { memo, useEffect } from 'react';
+import { memo, useEffect } from 'react'
 
 const PageTitle = memo<{ title: string }>(({ title }) => {
-  useEffect(() => {
-    document.title = title ? `${title} · LobeChat` : 'LobeChat';
-  }, [title]);
+    useEffect(() => {
+        document.title = title ? `${title} · LobeChat` : 'LobeChat'
+    }, [title])
 
-  return null;
-});
+    return null
+})
 
-export default PageTitle;
+export default PageTitle

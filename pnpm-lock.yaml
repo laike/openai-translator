@@ -40,6 +40,7 @@ specifiers:
   '@types/webextension-polyfill': ^0.10.1
   '@typescript-eslint/eslint-plugin': ^6.2.1
   '@typescript-eslint/parser': ^6.6.0
+  '@vercel/analytics': ^1.1.1
   '@vitejs/plugin-react': ^4.0.4
   ahooks: ^3.7.8
   antd: ^5.12.8
@@ -100,6 +101,7 @@ specifiers:
   p-map: ^7.0.1
   polished: ^4.2.2
   postcss: ^8.4.33
+  posthog-js: ^1.97.1
   prettier: ^3.0.0
   prism-react-renderer: ^2.3.0
   qs: ^6.11.2
@@ -115,7 +117,7 @@ specifiers:
   react-hooks-global-state: ^2.1.0
   react-hot-toast: ^2.4.1
   react-hotkeys-hook: ^4.4.1
-  react-i18next: ^13.0.3
+  react-i18next: ^14.0.0
   react-icons: ^4.10.1
   react-intersection-observer: ^9.5.3
   react-jss: ^10.10.0
@@ -123,7 +125,8 @@ specifiers:
   react-layout-kit: ^1.7.4
   react-lazy-load: ^4.0.1
   react-markdown: ^8.0.7
-  react-syntax-highlighter: npm:@fengkx/react-syntax-highlighter@15.6.1
+  react-router-dom: ^6.21.1
+  react-syntax-highlighter: npm:@fengkx/react-syntax-highlighter@^15.6.1
   react-use: ^17.4.2
   react-window: ^1.8.9
   react-wrap-balancer: ^1.1.0
@@ -181,6 +184,7 @@ dependencies:
   '@types/react-copy-to-clipboard': 5.0.7
   '@types/react-syntax-highlighter': 15.5.11
   '@types/react-window': 1.8.8
+  '@vercel/analytics': 1.1.1
   ahooks: 3.7.8_react@18.2.0
   antd: 5.12.8_mrmgyvvjwxyn5ncnaehlj4y4yi
   antd-style: 3.6.1_5a4dqlh4opskzjhip6v7tx7jxq
@@ -219,6 +223,7 @@ dependencies:
   nanoid: 5.0.4
   p-map: 7.0.1
   polished: 4.2.2
+  posthog-js: 1.97.1
   prism-react-renderer: 2.3.1_react@18.2.0
   qs: 6.11.2
   rc-field-form: 1.41.0_biqbaboplfbrettd7655fr4n2y
@@ -233,7 +238,7 @@ dependencies:
   react-hooks-global-state: 2.1.0_immer@10.0.3+react@18.2.0
   react-hot-toast: 2.4.1_biqbaboplfbrettd7655fr4n2y
   react-hotkeys-hook: 4.4.1_biqbaboplfbrettd7655fr4n2y
-  react-i18next: 13.5.0_6qd63a4ng4ieisypaf6bxh6ptu
+  react-i18next: 14.0.0_6qd63a4ng4ieisypaf6bxh6ptu
   react-icons: 4.12.0_react@18.2.0
   react-intersection-observer: 9.5.3_react@18.2.0
   react-jss: 10.10.0_react@18.2.0
@@ -241,6 +246,7 @@ dependencies:
   react-layout-kit: 1.7.4_react@18.2.0
   react-lazy-load: 4.0.1_biqbaboplfbrettd7655fr4n2y
   react-markdown: 8.0.7_sowt5japhjbdixo6tryvx3gigm
+  react-router-dom: 6.21.1_biqbaboplfbrettd7655fr4n2y
   react-syntax-highlighter: /@fengkx/react-syntax-highlighter/15.6.1_react@18.2.0
   react-use: 17.4.2_biqbaboplfbrettd7655fr4n2y
   react-window: 1.8.10_biqbaboplfbrettd7655fr4n2y
@@ -1953,6 +1959,11 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
+  /@remix-run/router/1.14.1:
+    resolution: {integrity: sha512-Qg4DMQsfPNAs88rb2xkdk03N3bjK4jgX5fR24eHCTR9q6PrhZQZ4UJBPzCHJkIpTRN1UKxx2DzjZmnC+7Lj0Ow==}
+    engines: {node: '>=14.0.0'}
+    dev: false
+
   /@rtsao/csstype/2.6.5-forked.0:
     resolution: {integrity: sha512-0HwnY8uPWcCloTgdbbaJG3MbDUfNf6yKWZfCKxFv9yj2Sbp4mSKaIjC7Cr/5L4hMxvrrk85CU3wlAg7EtBBJ1Q==}
     dev: false
@@ -2273,7 +2284,7 @@ packages:
       immer: 10.0.3
       leva: 0.9.35_vmlo3t4fedly2n2k3xv4356dvi
       lodash-es: 4.17.21
-      lucide-react: 0.308.0_react@18.2.0
+      lucide-react: 0.309.0_react@18.2.0
       polished: 4.2.2
       prism-react-renderer: 2.3.1_react@18.2.0
       query-string: 8.1.0
@@ -2797,6 +2808,12 @@ packages:
     dependencies:
       '@use-gesture/core': 10.3.0
       react: 18.2.0
+    dev: false
+
+  /@vercel/analytics/1.1.1:
+    resolution: {integrity: sha512-+NqgNmSabg3IFfxYhrWCfB/H+RCUOCR5ExRudNG2+pcRehq628DJB5e1u1xqwpLtn4pAYii4D98w7kofORAGQA==}
+    dependencies:
+      server-only: 0.0.1
     dev: false
 
   /@vitejs/plugin-react/4.2.1_vite@4.5.1:
@@ -5088,6 +5105,10 @@ packages:
       pend: 1.2.0
     dev: true
 
+  /fflate/0.4.8:
+    resolution: {integrity: sha512-FJqqoDBR00Mdj9ppamLa/Y7vxm+PRmNWA67N846RvsoYVMKB4q3y/de5PA7gUmRMYK/8CMz2GDZQmCRN1wBcWA==}
+    dev: false
+
   /file-entry-cache/6.0.1:
     resolution: {integrity: sha512-7Gps/XWymbLk2QLYK4NzpMOrYjMhdIxXuIvy2QBsLE6ljuodKvdkWs/cpyJJ3CVIVpH0Oi1Hvg1ovbMzLdFBBg==}
     engines: {node: ^10.12.0 || >=12.0.0}
@@ -6714,8 +6735,8 @@ packages:
       react: 18.2.0
     dev: false
 
-  /lucide-react/0.308.0_react@18.2.0:
-    resolution: {integrity: sha512-QC3S4Qi6s5y/w4bhS7sauDG29MsPwV0C5g9/mKkY7/gm3tPpg9tyRQG33g597Q5M3vmE0APcPuOjyQKsF8gnIg==}
+  /lucide-react/0.309.0_react@18.2.0:
+    resolution: {integrity: sha512-zNVPczuwFrCfksZH3zbd1UDE6/WYhYAdbe2k7CImVyPAkXLgIwbs6eXQ4loigqDnUFjyFYCI5jZ1y10Kqal0dg==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0
     dependencies:
@@ -8182,6 +8203,12 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
+  /posthog-js/1.97.1:
+    resolution: {integrity: sha512-N5r7sm4EiSxBgFTZuReR7wvHgzK/UkPbIsy/nZuIexLD+oa94ZQFNY/i1o8utDNmXHFWVKv4rwFmzRmPZYc8Zw==}
+    dependencies:
+      fflate: 0.4.8
+    dev: false
+
   /prelude-ls/1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
@@ -9032,8 +9059,8 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
-  /react-i18next/13.5.0_6qd63a4ng4ieisypaf6bxh6ptu:
-    resolution: {integrity: sha512-CFJ5NDGJ2MUyBohEHxljOq/39NQ972rh1ajnadG9BjTk+UXbHLq4z5DKEbEQBDoIhUmmbuS/fIMJKo6VOax1HA==}
+  /react-i18next/14.0.0_6qd63a4ng4ieisypaf6bxh6ptu:
+    resolution: {integrity: sha512-OCrS8rHNAmnr8ggGRDxjakzihrMW7HCbsplduTm3EuuQ6fyvWGT41ksZpqbduYoqJurBmEsEVZ1pILSUWkHZng==}
     peerDependencies:
       i18next: '>= 23.2.3'
       react: '>= 16.8.0'
@@ -9211,6 +9238,29 @@ packages:
       react-dom: 18.2.0_react@18.2.0
       react-draggable: 4.4.5_biqbaboplfbrettd7655fr4n2y
       tslib: 2.3.1
+    dev: false
+
+  /react-router-dom/6.21.1_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-QCNrtjtDPwHDO+AO21MJd7yIcr41UetYt5jzaB9Y1UYaPTCnVuJq6S748g1dE11OQlCFIQg+RtAA1SEZIyiBeA==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      react: '>=16.8'
+      react-dom: '>=16.8'
+    dependencies:
+      '@remix-run/router': 1.14.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-router: 6.21.1_react@18.2.0
+    dev: false
+
+  /react-router/6.21.1_react@18.2.0:
+    resolution: {integrity: sha512-W0l13YlMTm1YrpVIOpjCADJqEUpz1vm+CMo47RuFX4Ftegwm6KOYsL5G3eiE52jnJpKvzm6uB/vTKTPKM8dmkA==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      react: '>=16.8'
+    dependencies:
+      '@remix-run/router': 1.14.1
+      react: 18.2.0
     dev: false
 
   /react-simple-code-editor/0.13.1_biqbaboplfbrettd7655fr4n2y:
@@ -9735,6 +9785,10 @@ packages:
       type-fest: 0.13.1
     dev: true
     optional: true
+
+  /server-only/0.0.1:
+    resolution: {integrity: sha512-qepMx2JxAa5jjfzxG79yPPq+8BuFToHd1hm7kI+Z4zAq1ftQiP7HcxMhDDItrbtwVeLg/cY2JnKnrcFkmiswNA==}
+    dev: false
 
   /set-blocking/2.0.0:
     resolution: {integrity: sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw==}

@@ -1,26 +1,23 @@
 import '../enable-dev-hmr'
 import { createRoot } from 'react-dom/client'
-import '../../common/i18n.js'
 import './index.css'
-import { useTheme } from '../../common/hooks/useTheme'
 import DesktopPage from '@/app/chat'
+import { Route, MemoryRouter as Router, Routes } from 'react-router-dom'
+import ChatMobilePage from '@/app/chat/mobile'
 
 const root = createRoot(document.getElementById('root') as HTMLElement)
 
 function App() {
-    const { theme } = useTheme()
-
     return (
-        <div
-            style={{
-                position: 'relative',
-                height: '100%',
-                background: theme.colors.backgroundPrimary,
-            }}
-            data-testid='popup-container'
-        >
-            <DesktopPage />
-        </div>
+        <>
+            <Router>
+                <Routes>
+                    <Route path='/' element={<DesktopPage />} />
+                    <Route path='/chat' element={<DesktopPage />} />
+                    <Route path='/chat/mobile' element={<ChatMobilePage />} />
+                </Routes>
+            </Router>
+        </>
     )
 }
 

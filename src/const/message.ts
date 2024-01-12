@@ -4,7 +4,7 @@ export const LOADING_FLAT = '...'
 export const FUNCTION_MESSAGE_FLAG = '{"tool_calls"'
 
 export const isFunctionMessageAtStart = (content: string) => {
-    return content.startsWith(FUNCTION_MESSAGE_FLAG)
+    return content && content.startsWith(FUNCTION_MESSAGE_FLAG)
 }
 
 export const testFunctionMessageAtEnd = (content: string) => {

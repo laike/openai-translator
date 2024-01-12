@@ -3,7 +3,7 @@ import { useGlobalStore } from '@/store/global'
 import { useSessionStore } from '@/store/session'
 import { sessionSelectors } from '@/store/session/selectors'
 import { pathString } from '@/utils/url'
-
+import { useNavigate } from 'react-router-dom'
 import { OnAvatarsClick, RenderMessage } from '../types'
 import { AssistantMessage } from './Assistant'
 import { DefaultMessage } from './Default'
@@ -21,19 +21,15 @@ export const useAvatarsClick = (): OnAvatarsClick => {
     const [isInbox] = useSessionStore((s) => [sessionSelectors.isInboxSession(s)])
     const [toggleSystemRole] = useGlobalStore((s) => [s.toggleSystemRole])
     const { mobile } = useResponsive()
-    const router = {
-        push: (url: string) => {
-            console.log('url,', url)
-        },
-    }
+    const router = useNavigate()
     return (role) => {
         switch (role) {
             case 'assistant': {
                 return () => {
                     isInbox
-                        ? router.push('/settings/agent')
+                        ? router('/settings/agent')
                         : mobile
-                          ? router.push(pathString('/chat/settings', { hash: location.hash }))
+                          ? router(pathString('/chat/settings', { hash: location.hash }))
                           : toggleSystemRole(true)
                 }
             }

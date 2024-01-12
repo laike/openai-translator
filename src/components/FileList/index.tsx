@@ -1,22 +1,22 @@
-import { ImageGallery } from '@toboto/lobehub-ui';
-import { memo, useMemo } from 'react';
+import { ImageGallery } from '@toboto/lobehub-ui'
+import { memo, useMemo } from 'react'
 
-import GalleyGrid from '@/components/GalleyGrid';
+import GalleyGrid from '@/components/GalleyGrid'
 
-import ImageFileItem from './ImageFileItem';
+import ImageFileItem from './ImageFileItem'
 
 interface FileListProps {
-  items: string[];
+    items: string[]
 }
 
 const FileList = memo<FileListProps>(({ items }) => {
-  const data = useMemo(() => items.map((id) => ({ id })), [items]);
+    const data = useMemo(() => items.map((id) => ({ id })), [items])
 
-  return (
-    <ImageGallery>
-      <GalleyGrid items={data} renderItem={ImageFileItem} />
-    </ImageGallery>
-  );
-});
+    return (
+        <ImageGallery>
+            <GalleyGrid items={data} renderItem={ImageFileItem} />
+        </ImageGallery>
+    )
+})
 
-export default FileList;
+export default FileList

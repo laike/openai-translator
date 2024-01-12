@@ -1707,7 +1707,7 @@ export function InnerSettings({
                 </div>
             )}
             <div className='flex flex-row gap-5'>
-                <div className='w-[200px] bg-gray-900 rounded-xl'>
+                <div className='w-[200px]  rounded-xl'>
                     <nav
                         data-tauri-drag-region
                         className='text-black dark:text-white flex flex-row items-center  gap-2 py-5 px-4'
@@ -1743,7 +1743,7 @@ export function InnerSettings({
                         }}
                     />
                 </div>
-                <div className='flex-1 bg-gray-900 rounded-xl'>
+                <div className='flex-1 rounded-xl'>
                     <Form
                         form={form}
                         style={{

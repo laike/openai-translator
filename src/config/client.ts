@@ -33,25 +33,25 @@ declare global {
 
 export const getClientConfig = () => ({
     // Vercel Analytics
-    ANALYTICS_VERCEL: process.env.NEXT_PUBLIC_ANALYTICS_VERCEL === '1',
-    VERCEL_DEBUG: process.env.NEXT_PUBLIC_VERCEL_DEBUG === '1',
+    ANALYTICS_VERCEL: import.meta.env.NEXT_PUBLIC_ANALYTICS_VERCEL === '1',
+    VERCEL_DEBUG: import.meta.env.NEXT_PUBLIC_VERCEL_DEBUG === '1',
 
     // Plausible Analytics
-    ANALYTICS_PLAUSIBLE: process.env.NEXT_PUBLIC_ANALYTICS_PLAUSIBLE === '1',
-    PLAUSIBLE_DOMAIN: process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN,
-    PLAUSIBLE_SCRIPT_BASE_URL: process.env.NEXT_PUBLIC_PLAUSIBLE_SCRIPT_BASE_URL || 'https://plausible.io',
+    ANALYTICS_PLAUSIBLE: import.meta.env.NEXT_PUBLIC_ANALYTICS_PLAUSIBLE === '1',
+    PLAUSIBLE_DOMAIN: import.meta.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN,
+    PLAUSIBLE_SCRIPT_BASE_URL: import.meta.env.NEXT_PUBLIC_PLAUSIBLE_SCRIPT_BASE_URL || 'https://plausible.io',
 
     // Posthog Analytics
-    ANALYTICS_POSTHOG: process.env.NEXT_PUBLIC_ANALYTICS_POSTHOG === '1',
-    POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
-    POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
-    POSTHOG_DEBUG: process.env.NEXT_PUBLIC_POSTHOG_DEBUG === '1',
+    ANALYTICS_POSTHOG: import.meta.env.NEXT_PUBLIC_ANALYTICS_POSTHOG === '1',
+    POSTHOG_KEY: import.meta.env.NEXT_PUBLIC_POSTHOG_KEY,
+    POSTHOG_HOST: import.meta.env.NEXT_PUBLIC_POSTHOG_HOST,
+    POSTHOG_DEBUG: import.meta.env.NEXT_PUBLIC_POSTHOG_DEBUG === '1',
 
     // i18n debug mode
-    I18N_DEBUG: process.env.NEXT_PUBLIC_I18N_DEBUG === '1',
-    I18N_DEBUG_BROWSER: process.env.NEXT_PUBLIC_I18N_DEBUG_BROWSER === '1',
-    I18N_DEBUG_SERVER: process.env.NEXT_PUBLIC_I18N_DEBUG_SERVER === '1',
+    I18N_DEBUG: import.meta.env.NEXT_PUBLIC_I18N_DEBUG === '1',
+    I18N_DEBUG_BROWSER: import.meta.env.NEXT_PUBLIC_I18N_DEBUG_BROWSER === '1',
+    I18N_DEBUG_SERVER: import.meta.env.NEXT_PUBLIC_I18N_DEBUG_SERVER === '1',
 
     // developer debug mode
-    DEBUG_MODE: process.env.NEXT_PUBLIC_DEVELOPER_DEBUG === '1',
+    DEBUG_MODE: import.meta.env.NEXT_PUBLIC_DEVELOPER_DEBUG === '1',
 })

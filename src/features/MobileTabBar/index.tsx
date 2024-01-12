@@ -4,6 +4,7 @@ import { Bot, MessageSquare, User } from 'lucide-react'
 import { rgba } from 'polished'
 import { memo, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import {useNavigate} from 'react-router-dom'
 
 import { useGlobalStore } from '@/store/global'
 import { SidebarTabKey } from '@/store/global/initialState'
@@ -20,11 +21,7 @@ export default memo<{ className?: string }>(({ className }) => {
     const [tab, setTab] = useGlobalStore((s) => [s.sidebarKey, s.switchSideBar])
     const { t } = useTranslation('common')
     const { styles } = useStyles()
-    const router = {
-        push: (url: string) => {
-            console.log('url,', url)
-        },
-    }
+    const router = useNavigate()
     const items: MobileTabBarProps['items'] = useMemo(
         () => [
             {
@@ -32,7 +29,7 @@ export default memo<{ className?: string }>(({ className }) => {
                 key: SidebarTabKey.Chat,
                 onClick: () => {
                     setTab(SidebarTabKey.Chat)
-                    router.push('/chat')
+                    router('/chat')
                 },
                 title: t('tab.chat'),
             },
@@ -41,7 +38,7 @@ export default memo<{ className?: string }>(({ className }) => {
                 key: SidebarTabKey.Market,
                 onClick: () => {
                     setTab(SidebarTabKey.Market)
-                    router.push('/market')
+                    router('/market')
                 },
                 title: t('tab.market'),
             },
@@ -50,7 +47,7 @@ export default memo<{ className?: string }>(({ className }) => {
                 key: SidebarTabKey.Setting,
                 onClick: () => {
                     setTab(SidebarTabKey.Setting)
-                    router.push('/settings')
+                    router('/settings')
                 },
                 title: t('tab.setting'),
             },

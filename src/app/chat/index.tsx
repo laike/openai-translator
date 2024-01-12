@@ -1,28 +1,17 @@
-'use client'
+import RootLayout from '../layout'
+import DesktopPage from './desktop'
+import Migration from './features/Migration'
 
-import { FC, memo } from 'react'
-import { Flexbox } from 'react-layout-kit'
+const Page = () => {
+    const Page = DesktopPage
 
-import ResponsiveIndex from '@/components/ResponsiveIndex'
+    return (
+        <RootLayout>
+            <Migration>
+                <Page />
+            </Migration>
+        </RootLayout>
+    )
+}
 
-import PageTitle from '../features/PageTitle'
-import ChatHeader from './features/ChatHeader'
-import Conversation from './features/Conversation'
-import SideBar from './features/SideBar'
-import Layout from './layout.desktop'
-
-const Mobile: FC = () => <div>Mobile</div>
-
-const DesktopPage = memo(() => (
-    <ResponsiveIndex Mobile={Mobile}>
-        <Layout>
-            <PageTitle />
-            <ChatHeader />
-            <Flexbox flex={1} height={'calc(100% - 64px)'} horizontal>
-                <Conversation />
-                <SideBar />
-            </Flexbox>
-        </Layout>
-    </ResponsiveIndex>
-))
-export default DesktopPage
+export default Page

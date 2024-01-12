@@ -20,6 +20,7 @@ import DataImporter from '@/features/DataImporter'
 import { configService } from '@/services/config'
 import { GlobalStore, useGlobalStore } from '@/store/global'
 import { SettingsTabs, SidebarTabKey } from '@/store/global/initialState'
+import { useNavigate } from 'react-router-dom'
 
 export interface BottomActionProps {
     setTab: GlobalStore['switchSideBar']
@@ -27,11 +28,7 @@ export interface BottomActionProps {
 }
 
 const BottomActions = memo<BottomActionProps>(({ tab, setTab }) => {
-    const router = {
-        push: (url: string) => {
-            console.log('url,', url)
-        },
-    }
+    const router = useNavigate()
     const { t } = useTranslation('common')
 
     const [hasNewVersion, useCheckLatestVersion] = useGlobalStore((s) => [s.hasNewVersion, s.useCheckLatestVersion])
@@ -118,7 +115,7 @@ const BottomActions = memo<BottomActionProps>(({ tab, setTab }) => {
                     settingsTab: SettingsTabs.Common,
                     sidebarKey: SidebarTabKey.Setting,
                 })
-                router.push('/settings/common')
+                router('/settings/common')
             },
         },
     ]

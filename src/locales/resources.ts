@@ -1,5 +1,3 @@
-import resources from './default'
-
 export const locales = [
     'de-DE',
     'en-US',
@@ -13,9 +11,10 @@ export const locales = [
     'zh-CN',
     'zh-TW',
     'vi-VN',
+    'en',
+    'zh',
 ] as const
 
-export type DefaultResources = typeof resources
 export type Locales = (typeof locales)[number]
 
 export const normalizeLocale = (locale: string) => {

@@ -14,6 +14,22 @@ export default defineConfig({
             manifest: getManifest('chromium'),
         }),
     ],
+    server: {
+        proxy: {
+            '/api': {
+                // target: 'https://app.toboto.com',
+                // target: 'https://test.tgtool.sekai.me',
+                target: 'https://chat.aipainter.work',
+                changeOrigin: true,
+                secure: false,
+            },
+            // '/assets/*': {
+            //   target: 'http://localhost:8080',
+            //   changeOrigin: true,
+            //   secure: false,
+            // },
+        },
+    },
     build: {
         minify: !isDev,
         sourcemap: isDev,

@@ -17,6 +17,7 @@ import { setNamespace } from '@/utils/storeDebug'
 import { agentSelectors } from '../agent/selectors'
 import { initLobeSession } from './initialState'
 import { sessionSelectors } from './selectors'
+import { idea } from 'react-syntax-highlighter/dist/cjs/styles/hljs'
 
 const n = setNamespace('session')
 
@@ -142,16 +143,15 @@ export const createSessionSlice: StateCreator<SessionStore, [['zustand/devtools'
         const { activeId, router } = get()
 
         const id = activeId || INBOX_SESSION_ID
-
+        console.log('router', router, router.push, idea)
         get().activeSession(id)
 
         router?.push(SESSION_CHAT_URL(id, get().isMobile))
     },
     switchSession: (sessionId = INBOX_SESSION_ID) => {
         const { isMobile, router } = get()
-
+        console.log('router', router, router.push, idea)
         get().activeSession(sessionId)
-
         router?.push(SESSION_CHAT_URL(sessionId, isMobile))
     },
 

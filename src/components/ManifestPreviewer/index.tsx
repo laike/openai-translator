@@ -1,30 +1,28 @@
-import { Highlighter } from '@toboto/lobehub-ui';
-import { Popover } from 'antd';
-import { ReactNode, memo } from 'react';
+import { Highlighter } from '@toboto/lobehub-ui'
+import { Popover } from 'antd'
+import { ReactNode, memo } from 'react'
 
 interface PluginManifestPreviewerProps {
-  children?: ReactNode;
-  manifest: object;
-  trigger?: 'click' | 'hover';
+    children?: ReactNode
+    manifest: object
+    trigger?: 'click' | 'hover'
 }
 
-const ManifestPreviewer = memo<PluginManifestPreviewerProps>(
-  ({ manifest, children, trigger = 'click' }) => (
+const ManifestPreviewer = memo<PluginManifestPreviewerProps>(({ manifest, children, trigger = 'click' }) => (
     <Popover
-      arrow={false}
-      content={
-        <Highlighter language={'json'} style={{ maxHeight: 600, maxWidth: 400 }}>
-          {JSON.stringify(manifest, null, 2)}
-        </Highlighter>
-      }
-      placement={'right'}
-      style={{ width: 400 }}
-      title={'Manifest JSON'}
-      trigger={trigger}
+        arrow={false}
+        content={
+            <Highlighter language={'json'} style={{ maxHeight: 600, maxWidth: 400 }}>
+                {JSON.stringify(manifest, null, 2)}
+            </Highlighter>
+        }
+        placement={'right'}
+        style={{ width: 400 }}
+        title={'Manifest JSON'}
+        trigger={trigger}
     >
-      {children}
+        {children}
     </Popover>
-  ),
-);
+))
 
-export default ManifestPreviewer;
+export default ManifestPreviewer
